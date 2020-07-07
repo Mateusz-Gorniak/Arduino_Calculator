@@ -1,26 +1,22 @@
-#include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <stdio.h>
 
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-char x[6] = {'t', 'e', 'k', 's', 't'};
-void setup()
-{
-  lcd.begin(16, 2);
+LiquidCrystal lcd(12,11,5,4,3,2);
+
+char rxBuff[32];
+int ValueA = 0, ValueB = 0;
+char operation[16];
+
+void setup(){
+lcd.begin(16, 2);
+lcd.print("Nazwisko");
+
+Serial.begin(9600);
+Serial.setTimeout(3000);
 }
-void loop()
-{
-  for (int i = 0; i < 12; i++)
-  {
-    lcd.setCursor(i, 0);
-    lcd.print(x);
-    delay(1000);
-    lcd.clear();
-  }
-  for (int j = 0; j < 12; j++)
-  {
-    lcd.setCursor((11 - j), 1);
-    lcd.print(x);
-    delay(1000);
-    lcd.clear();
-  }
+
+void loop(){
+  Serial.readBytesUntil('\r', rxBuff, sizeof(rxBuff)-1);
+  lcd.setCursor(0,0);
+  lcd.print(rxBuff);
 }
